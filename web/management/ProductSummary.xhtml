@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      template="/templates/template.xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    
+    <ui:define name="content">
+        <h:outputLabel value="Kategori Seçiniz" />
+        <p:selectOneMenu value="#{productSummaryBean.categoryId}">
+            <f:selectItem itemValue="0" itemLabel="--Tümü--"></f:selectItem>
+            <f:selectItems value="#{appBean.categoryList}" var="cat" itemValue="#{cat.categoryId}" itemLabel="#{cat.categoryName}"/>
+        </p:selectOneMenu>
+        <p:commandButton value="listele" action="#{productSummaryBean.filter()}" 
+                         update=":mainForm" >
+        </p:commandButton>
+        <p:dataTable id="dt2" value="#{productSummaryBean.lazyModel}" 
+                     var="product"  paginator="true" rows="#{productSummaryBean.pageSize}"
+                      lazy="true"
+                      paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                      rowsPerPageTemplate="5,10,15">
+            <p:column>
+                <!-- column header -->
+                
+                <f:facet name="header">Ürün Adı</f:facet>
+                <h:outputText value="#{product.productName}" />
+            </p:column>
+             <p:column>
+                <!-- column header -->
+                <f:facet name="header">Ürün Fiyatı</f:facet>
+                <h:outputText value="#{product.salesPrice}" />
+            </p:column>
+            <p:column>
+                <!-- column header -->
+                <f:facet name="header">Ürün Kategorisi</f:facet>
+                <h:outputText value="#{product.categoryName}" />
+            </p:column>
+
+
+            <p:column headerText="Actions">
+                <p:commandLink update=":mainForm:display" oncomplete="PF('deleteDlg').show();">
+                    <h:panelGroup styleClass="ui-icon ui-icon-trash" />
+                    <f:setPropertyActionListener value="#{product}" target="#{productSummaryBean.selectedProduct}" />
+                 </p:commandLink>
+                <p:link value="Güncelle" styleClass="ui-icon ui-icon-pencil" outcome="ProductDetail.xhtml">
+                    <f:param name="productId" value="#{product.productId}" />
+                </p:link>
+            </p:column>
+
+      
+        </p:dataTable>
+        
+        <p:confirmDialog appendTo="@(body)" widgetVar="deleteDlg" id="deleteDialog" header="Delete" message="Delete this ?"
+                     width="400" showEffect="bounce"  closable="false" severity="alert">
+                <h:panelGrid id="display" columns="2" cellpadding="4" style="margin:0 auto;">
+                        <h:outputText value="Product Name:" />
+                        <h:outputText value="#{productSummaryBean.selectedProduct.productName}" style="font-weight:bold"/>      
+                        <p:commandButton process = "@this" id="yes" value="Yes" actionListener="#{productSummaryBean.deleteRow(productSummaryBean.selectedProduct)}"  oncomplete="PF('deleteDlg').hide();" update=":mainForm:dt2" />
+                        <p:commandButton process = "@this" id="no" value="No" actionListener="#{productSummaryBean.cancel()}" oncomplete="PF('deleteDlg').hide();" />
+                </h:panelGrid>
+        </p:confirmDialog>
+
+        <p:column>
+            <p:link value="Ekle" outcome="ProductDetail.xhtml">
+            </p:link>
+        </p:column>
+            
+         
+    </ui:define>
+   </ui:composition>
+

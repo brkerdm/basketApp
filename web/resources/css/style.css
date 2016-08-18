@@ -1,0 +1,27 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Jul 17, 2016, 3:59:17 PM
+    Author     : burak
+*/
+.ui-layout-pane-north .ui-layout-unit-content  {
+    background-color: #33ff33;
+    text-align: center;
+    height:200px;
+    color : #ffcccc;
+    background-image:url('images/sepet.jpg');
+ }
+
+ 
+  .northUnit {
+     height: 100px !important;
+   }
+ 
+ .ui-menu.someclass {
+    font-size: 14px;
+    background: #557FFF
+ }
+
